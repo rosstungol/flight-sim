@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import type { RefObject } from 'react'
 import { type Group, Matrix4, Vector3 } from 'three'
 
-import { CAMERA_MATRIX_POSITION, SHIP_POSITION } from '../sceneConfig'
+import { cameraMatrixPosition, shipPosition } from '../sceneConfig'
 
 export function CameraController({
 	meshRef,
@@ -11,13 +11,13 @@ export function CameraController({
 	meshRef: RefObject<Group | null>
 }) {
 	useFrame(({ camera }) => {
-		SHIP_POSITION.add(new Vector3(0, 0, -1))
+		shipPosition.add(new Vector3(0, 0, -1))
 
 		const matrix = new Matrix4().multiply(
 			new Matrix4().makeTranslation(
-				SHIP_POSITION.x,
-				SHIP_POSITION.y,
-				SHIP_POSITION.z
+				shipPosition.x,
+				shipPosition.y,
+				shipPosition.z
 			)
 		)
 
@@ -30,17 +30,17 @@ export function CameraController({
 		const cameraMatrix = new Matrix4()
 			.multiply(
 				new Matrix4().makeTranslation(
-					SHIP_POSITION.x,
-					SHIP_POSITION.y,
-					SHIP_POSITION.z
+					shipPosition.x,
+					shipPosition.y,
+					shipPosition.z
 				)
 			)
 			.multiply(new Matrix4().makeRotationX(-0.2))
 			.multiply(
 				new Matrix4().makeTranslation(
-					CAMERA_MATRIX_POSITION.x,
-					CAMERA_MATRIX_POSITION.y,
-					CAMERA_MATRIX_POSITION.z
+					cameraMatrixPosition.x,
+					cameraMatrixPosition.y,
+					cameraMatrixPosition.z
 				)
 			)
 
@@ -53,9 +53,9 @@ export function CameraController({
 		<PerspectiveCamera
 			makeDefault
 			position={[
-				CAMERA_MATRIX_POSITION.x,
-				CAMERA_MATRIX_POSITION.y,
-				CAMERA_MATRIX_POSITION.z,
+				cameraMatrixPosition.x,
+				cameraMatrixPosition.y,
+				cameraMatrixPosition.z,
 			]}
 		/>
 	)
