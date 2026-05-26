@@ -22,11 +22,11 @@ export function CameraController({
 			)
 		)
 
-		if (meshRef.current == null) return
-
-		meshRef.current.matrixAutoUpdate = false
-		meshRef.current.matrix.copy(matrix)
-		meshRef.current.matrixWorldNeedsUpdate = true
+		if (meshRef.current != null) {
+			meshRef.current.matrixAutoUpdate = false
+			meshRef.current.matrix.copy(matrix)
+			meshRef.current.matrixWorldNeedsUpdate = true
+		}
 
 		const cameraMatrix = new Matrix4()
 			.multiply(
