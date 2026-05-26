@@ -1,0 +1,13 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+:root,
+main {
+	height: 100dvh;
+	width: 100dvw;
+	overflow: hidden;
+	background-color: black;
+}
