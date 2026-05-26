@@ -3,7 +3,8 @@ import { useFrame } from '@react-three/fiber'
 import type { RefObject } from 'react'
 import { type Group, Matrix4, Vector3 } from 'three'
 
-import { cameraMatrixPosition, shipPosition } from '../sceneConfig'
+export const shipPosition = new Vector3(0, 0, 0)
+export const cameraMatrixPosition = new Vector3(0, 0.3, 2.5)
 
 export function CameraController({
 	meshRef,
