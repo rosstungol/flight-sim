@@ -17,12 +17,13 @@ type SpaceshipProps = JSX.IntrinsicElements['group'] & {
 }
 
 export function Spaceship(props: SpaceshipProps) {
+	const { meshRef, ...groupProps } = props
 	const { nodes, materials } = useGLTF(
 		'/assets/models/spaceship.glb'
 	) as unknown as GLTFResult
 
 	return (
-		<group ref={props.meshRef} {...props} dispose={null}>
+		<group ref={meshRef} {...groupProps} dispose={null}>
 			<mesh
 				castShadow
 				receiveShadow

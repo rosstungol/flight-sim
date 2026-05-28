@@ -2,9 +2,14 @@ import { PerspectiveCamera } from '@react-three/drei/core/PerspectiveCamera'
 import { useFrame } from '@react-three/fiber'
 import type { RefObject } from 'react'
 import { type Group, Matrix4, Vector3 } from 'three'
+import { updateSpaceshipAxis } from '../../config/controls'
 
-export const shipPosition = new Vector3(0, 0, 0)
+export const spaceshipPosition = new Vector3(0, 0, 0)
 export const cameraMatrixPosition = new Vector3(0, 0.3, 2.5)
+
+const x = new Vector3(1, 0, 0)
+const y = new Vector3(0, 1, 0)
+const z = new Vector3(0, 0, 1)
 
 export function CameraController({
 	meshRef,
@@ -12,15 +17,19 @@ export function CameraController({
 	meshRef: RefObject<Group | null>
 }) {
 	useFrame(({ camera }) => {
-		shipPosition.add(new Vector3(0, 0, -1))
+		updateSpaceshipAxis(x, y, z, spaceshipPosition, camera)
 
-		const matrix = new Matrix4().multiply(
-			new Matrix4().makeTranslation(
-				shipPosition.x,
-				shipPosition.y,
-				shipPosition.z
+		const rotationMatrix = new Matrix4().makeBasis(x, y, z)
+
+		const matrix = new Matrix4()
+			.multiply(
+				new Matrix4().makeTranslation(
+					spaceshipPosition.x,
+					spaceshipPosition.y,
+					spaceshipPosition.z
+				)
 			)
-		)
+			.multiply(rotationMatrix)
 
 		if (meshRef.current != null) {
 			meshRef.current.matrixAutoUpdate = false
@@ -31,11 +40,12 @@ export function CameraController({
 		const cameraMatrix = new Matrix4()
 			.multiply(
 				new Matrix4().makeTranslation(
-					shipPosition.x,
-					shipPosition.y,
-					shipPosition.z
+					spaceshipPosition.x,
+					spaceshipPosition.y,
+					spaceshipPosition.z
 				)
 			)
+			.multiply(rotationMatrix)
 			.multiply(new Matrix4().makeRotationX(-0.2))
 			.multiply(
 				new Matrix4().makeTranslation(
