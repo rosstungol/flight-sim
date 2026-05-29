@@ -16,7 +16,6 @@ export function SpaceScene() {
 			<Spaceship meshRef={meshRef} />
 			<Lighting />
 			<Skybox />
-			<gridHelper args={[2000, 200, 0xff0000, 'teal']} />
 		</Canvas>
 	)
 }
