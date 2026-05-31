@@ -2,7 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { useRef } from 'react'
 import type { Group } from 'three'
 
-import { CameraController } from '../camera/CameraController'
+import { CameraController } from './CameraController'
 import { Lighting } from './Lighting'
 import { Skybox } from './Skybox'
 import { Spaceship } from './Spaceship'
@@ -16,7 +16,6 @@ export function SpaceScene() {
 			<Spaceship meshRef={meshRef} />
 			<Lighting />
 			<Skybox />
-			<gridHelper args={[2000, 200, 0xff0000, 'teal']} />
 		</Canvas>
 	)
 }
