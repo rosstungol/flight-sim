@@ -5,6 +5,7 @@ import type { Group } from 'three'
 import { CameraController } from './CameraController'
 import { Lighting } from './Lighting'
 import { Skybox } from './Skybox'
+import { SpaceDust } from './SpaceDust'
 import { Spaceship } from './Spaceship'
 
 export function SpaceScene() {
@@ -16,6 +17,7 @@ export function SpaceScene() {
 			<Spaceship meshRef={meshRef} />
 			<Lighting />
 			<Skybox />
+			<SpaceDust />
 		</Canvas>
 	)
 }
