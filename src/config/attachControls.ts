@@ -9,6 +9,15 @@ export function attachControls() {
 		return () => {}
 	}
 
+	const resetControls = () => {
+		controls.a = false
+		controls.d = false
+		controls.w = false
+		controls.s = false
+		controls.r = false
+		controls.shift = false
+	}
+
 	const handleKeyDown = (e: KeyboardEvent) => {
 		const key = e.key.toLowerCase()
 		if (isControlKey(key)) {
@@ -25,9 +34,17 @@ export function attachControls() {
 
 	window.addEventListener('keydown', handleKeyDown)
 	window.addEventListener('keyup', handleKeyUp)
+	window.addEventListener('blur', resetControls)
+	document.addEventListener('visibilitychange', () => {
+		if (document.hidden) resetControls()
+	})
 
 	return () => {
 		window.removeEventListener('keydown', handleKeyDown)
 		window.removeEventListener('keyup', handleKeyUp)
+		window.removeEventListener('blur', resetControls)
+		document.removeEventListener('visibilitychange', () => {
+			if (document.hidden) resetControls()
+		})
 	}
 }
