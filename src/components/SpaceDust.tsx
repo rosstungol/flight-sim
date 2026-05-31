@@ -19,7 +19,7 @@ void main() {
 }
 `
 
-export function SpaceDust({ count = 1000000, radius = 2000 }) {
+export function SpaceDust({ count = 600000, radius = 1600 }) {
 	const geometry = useMemo(() => {
 		const geometry = new BufferGeometry()
 
@@ -58,6 +58,7 @@ export function SpaceDust({ count = 1000000, radius = 2000 }) {
 				fragmentShader={fragmentShader}
 				depthWrite={false}
 				blending={AdditiveBlending}
+				transparent
 			/>
 		</points>
 	)
