@@ -3,7 +3,7 @@ import { controls } from './controls'
 
 let yawVelocity = 0
 let pitchVelocity = 0
-const maxVelocity = 0.04
+const maxAngularVelocity = 2.4
 const spaceshipSpeed = 0.2
 export let turbo = 0
 
@@ -26,26 +26,26 @@ export function updateSpaceshipAxis(
 	pitchVelocity *= damping
 
 	if (controls.a) {
-		yawVelocity += 0.0025 * frameScale
+		yawVelocity += 0.15
 	}
 
 	if (controls.d) {
-		yawVelocity -= 0.0025 * frameScale
+		yawVelocity -= 0.15
 	}
 
 	if (controls.w) {
-		pitchVelocity += 0.0025 * frameScale
+		pitchVelocity += 0.15
 	}
 
 	if (controls.s) {
-		pitchVelocity -= 0.0025 * frameScale
+		pitchVelocity -= 0.15
 	}
 
-	if (Math.abs(yawVelocity) > maxVelocity)
-		yawVelocity = Math.sign(yawVelocity) * maxVelocity
+	if (Math.abs(yawVelocity) > maxAngularVelocity)
+		yawVelocity = Math.sign(yawVelocity) * maxAngularVelocity
 
-	if (Math.abs(pitchVelocity) > maxVelocity)
-		pitchVelocity = Math.sign(pitchVelocity) * maxVelocity
+	if (Math.abs(pitchVelocity) > maxAngularVelocity)
+		pitchVelocity = Math.sign(pitchVelocity) * maxAngularVelocity
 
 	if (controls.r) {
 		yawVelocity = 0
@@ -63,11 +63,11 @@ export function updateSpaceshipAxis(
 		return
 	}
 
-	x.applyAxisAngle(z, yawVelocity)
-	y.applyAxisAngle(z, yawVelocity)
+	x.applyAxisAngle(z, yawVelocity * delta)
+	y.applyAxisAngle(z, yawVelocity * delta)
 
-	y.applyAxisAngle(x, pitchVelocity)
-	z.applyAxisAngle(x, pitchVelocity)
+	y.applyAxisAngle(x, pitchVelocity * delta)
+	z.applyAxisAngle(x, pitchVelocity * delta)
 
 	x.normalize()
 	y.normalize()
