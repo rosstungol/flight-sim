@@ -1,4 +1,4 @@
-import { SpaceScene } from './components/scene/SpaceScene'
+import { SpaceScene } from './components/SpaceScene'
 
 function App() {
 	return (
