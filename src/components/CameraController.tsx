@@ -16,11 +16,19 @@ const x = new Vector3(1, 0, 0)
 const y = new Vector3(0, 1, 0)
 const z = new Vector3(0, 0, 1)
 
-export const spaceshipPosition = new Vector3(0, 0, 0)
-export const cameraMatrixPosition = new Vector3(0, 0.3, 2.5)
-
+const rotationMatrix = new Matrix4()
 const delayedRotationMatrix = new Matrix4()
 const delayedQuaternion = new Quaternion()
+const quaternionB = new Quaternion()
+
+const spaceshipTranslation = new Matrix4()
+const spaceshipPosition = new Vector3(0, 0, 0)
+const spaceshipMatrix = new Matrix4()
+
+const cameraTranslation = new Matrix4()
+const cameraMatrixPosition = new Vector3(0, 0.3, 2.5)
+const cameraMatrix = new Matrix4()
+const cameraTilt = new Matrix4().makeRotationX(-0.2)
 
 export function CameraController({
 	meshRef,
@@ -39,30 +47,28 @@ export function CameraController({
 			delta
 		)
 
-		const rotationMatrix = new Matrix4().makeBasis(x, y, z)
+		rotationMatrix.makeBasis(x, y, z)
 
-		const matrix = new Matrix4()
-			.multiply(
-				new Matrix4().makeTranslation(
-					spaceshipPosition.x,
-					spaceshipPosition.y,
-					spaceshipPosition.z
-				)
-			)
-			.multiply(rotationMatrix)
+		spaceshipTranslation.makeTranslation(
+			spaceshipPosition.x,
+			spaceshipPosition.y,
+			spaceshipPosition.z
+		)
+		spaceshipMatrix.copy(spaceshipTranslation).multiply(rotationMatrix)
 
 		if (meshRef.current != null) {
 			meshRef.current.matrixAutoUpdate = false
-			meshRef.current.matrix.copy(matrix)
+			meshRef.current.matrix.copy(spaceshipMatrix)
 			meshRef.current.matrixWorldNeedsUpdate = true
 		}
 
 		const quaternionA = new Quaternion().copy(delayedQuaternion)
-		const quaternionB = new Quaternion()
 
 		quaternionB.setFromRotationMatrix(rotationMatrix)
 
-		const interpolationFactor = 0.175
+		const interpolationFactor60fps = 0.175
+		const interpolationFactor =
+			1 - (1 - interpolationFactor60fps) ** (delta * 60)
 		const interpolatedQuaternion = new Quaternion().copy(quaternionA)
 
 		interpolatedQuaternion.slerp(quaternionB, interpolationFactor)
@@ -71,23 +77,21 @@ export function CameraController({
 		delayedRotationMatrix.identity()
 		delayedRotationMatrix.makeRotationFromQuaternion(delayedQuaternion)
 
-		const cameraMatrix = new Matrix4()
-			.multiply(
-				new Matrix4().makeTranslation(
-					spaceshipPosition.x,
-					spaceshipPosition.y,
-					spaceshipPosition.z
-				)
-			)
+		spaceshipTranslation.makeTranslation(
+			spaceshipPosition.x,
+			spaceshipPosition.y,
+			spaceshipPosition.z
+		)
+		cameraTranslation.makeTranslation(
+			cameraMatrixPosition.x,
+			cameraMatrixPosition.y,
+			cameraMatrixPosition.z
+		)
+		cameraMatrix
+			.copy(spaceshipTranslation)
 			.multiply(delayedRotationMatrix)
-			.multiply(new Matrix4().makeRotationX(-0.2))
-			.multiply(
-				new Matrix4().makeTranslation(
-					cameraMatrixPosition.x,
-					cameraMatrixPosition.y,
-					cameraMatrixPosition.z
-				)
-			)
+			.multiply(cameraTilt)
+			.multiply(cameraTranslation)
 
 		camera.matrixAutoUpdate = false
 		camera.matrix.copy(cameraMatrix)
