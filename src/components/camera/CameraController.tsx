@@ -1,6 +1,6 @@
 import { PerspectiveCamera } from '@react-three/drei/core/PerspectiveCamera'
 import { useFrame } from '@react-three/fiber'
-import type { RefObject } from 'react'
+import { type RefObject, useEffect } from 'react'
 import {
 	type Group,
 	Matrix4,
@@ -9,7 +9,8 @@ import {
 	Vector3,
 } from 'three'
 
-import { updateSpaceshipAxis } from '../../config/controls'
+import { attachControls } from '../../config/attachControls'
+import { updateSpaceshipAxis } from '../../config/updateSpaceshipAxis'
 
 const x = new Vector3(1, 0, 0)
 const y = new Vector3(0, 1, 0)
@@ -26,13 +27,16 @@ export function CameraController({
 }: {
 	meshRef: RefObject<Group | null>
 }) {
-	useFrame(({ camera }) => {
+	useEffect(() => attachControls(), [])
+
+	useFrame(({ camera }, delta) => {
 		updateSpaceshipAxis(
 			x,
 			y,
 			z,
 			spaceshipPosition,
-			camera as PerspectiveCameraType
+			camera as PerspectiveCameraType,
+			delta
 		)
 
 		const rotationMatrix = new Matrix4().makeBasis(x, y, z)
