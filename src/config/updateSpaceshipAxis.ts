@@ -1,4 +1,5 @@
 import type { PerspectiveCamera, Vector3 } from 'three'
+
 import { controls } from './controls'
 
 let yawVelocity = 0
